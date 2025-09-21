@@ -2,11 +2,11 @@
   <div class="p-6">
     <h2 class="text-2xl font-bold mb-4">📂 Files</h2>
 
-    <!-- Loading State -->
-    <div v-if="loading" class="text-gray-500">Loading files...</div>
+    <!-- Loading -->
+    <p v-if="loading" class="text-gray-500">Loading files...</p>
 
-    <!-- Error State -->
-    <div v-if="error" class="text-red-500">{{ error }}</div>
+    <!-- Error -->
+    <p v-if="error" class="text-red-500">{{ error }}</p>
 
     <!-- File List -->
     <ul v-if="files.length > 0" class="space-y-2">
@@ -26,16 +26,14 @@
       </li>
     </ul>
 
-    <!-- Empty State -->
-    <div v-else-if="!loading && !error" class="text-gray-400">
-      No files found.
-    </div>
+    <!-- Empty -->
+    <p v-else-if="!loading && !error" class="text-gray-400">No files found.</p>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
-import api from "./api";
+import axios from "axios";
 
 const files = ref([]);
 const loading = ref(false);
@@ -43,9 +41,10 @@ const error = ref(null);
 
 const fetchFiles = async () => {
   loading.value = true;
-  error.value = null;
   try {
-    const res = await api.getFiles();
+    const res = await axios.get(
+      "https://68ceda846dc3f35077802f63.mockapi.io/files"
+    );
     files.value = res.data;
   } catch (err) {
     error.value = "Failed to fetch files.";
