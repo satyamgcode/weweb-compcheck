@@ -31,30 +31,37 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from "vue";
+<script>
 import axios from "axios";
 
-const files = ref([]);
-const loading = ref(false);
-const error = ref(null);
-
-const fetchFiles = async () => {
-  loading.value = true;
-  try {
-    const res = await axios.get(
-      "https://68ceda846dc3f35077802f63.mockapi.io/files"
-    );
-    files.value = res.data;
-  } catch (err) {
-    error.value = "Failed to fetch files.";
-    console.error(err);
-  } finally {
-    loading.value = false;
-  }
+export default {
+  name: "FilesList",
+  data() {
+    return {
+      files: [],
+      loading: false,
+      error: null,
+    };
+  },
+  methods: {
+    async fetchFiles() {
+      this.loading = true;
+      this.error = null;
+      try {
+        const res = await axios.get(
+          "https://68ceda846dc3f35077802f63.mockapi.io/files"
+        );
+        this.files = res.data;
+      } catch (err) {
+        this.error = "Failed to fetch files.";
+        console.error(err);
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
+  mounted() {
+    this.fetchFiles();
+  },
 };
-
-onMounted(() => {
-  fetchFiles();
-});
 </script>
