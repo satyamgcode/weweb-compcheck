@@ -7,8 +7,5 @@
   },
   "devDependencies": {
     "@weweb/cli": "latest"
-  },
-  "dependencies": {
-    "axios": "^1.12.2"
   }
 }
